@@ -111,6 +111,8 @@ var _stringProperties = {};
   var Player_name; // EjsS Model.Variables.VariablesTable.Player_name
   var Score; // EjsS Model.Variables.VariablesTable.Score
   var Player_data; // EjsS Model.Variables.VariablesTable.Player_data
+  var Final_txt; // EjsS Model.Variables.VariablesTable.Final_txt
+  var Final_txt_en; // EjsS Model.Variables.VariablesTable.Final_txt_en
 
   var _privateOdesList;
   var _ODEi_evolution1;
@@ -171,7 +173,9 @@ var _stringProperties = {};
       Size_arrow_max : Size_arrow_max,
       Player_name : Player_name,
       Score : Score,
-      Player_data : Player_data
+      Player_data : Player_data,
+      Final_txt : Final_txt,
+      Final_txt_en : Final_txt_en
     };
   };
 
@@ -224,7 +228,9 @@ var _stringProperties = {};
       Size_arrow_max : Size_arrow_max,
       Player_name : Player_name,
       Score : Score,
-      Player_data : Player_data
+      Player_data : Player_data,
+      Final_txt : Final_txt,
+      Final_txt_en : Final_txt_en
     };
   };
 
@@ -275,6 +281,8 @@ var _stringProperties = {};
     if(typeof json.Player_name != "undefined") Player_name = json.Player_name;
     if(typeof json.Score != "undefined") Score = json.Score;
     if(typeof json.Player_data != "undefined") Player_data = json.Player_data;
+    if(typeof json.Final_txt != "undefined") Final_txt = json.Final_txt;
+    if(typeof json.Final_txt_en != "undefined") Final_txt_en = json.Final_txt_en;
   };
 
   _model._readParametersPublic = function(json) {
@@ -324,6 +332,8 @@ var _stringProperties = {};
     if(typeof json.Player_name != "undefined") Player_name = json.Player_name;
     if(typeof json.Score != "undefined") Score = json.Score;
     if(typeof json.Player_data != "undefined") Player_data = json.Player_data;
+    if(typeof json.Final_txt != "undefined") Final_txt = json.Final_txt;
+    if(typeof json.Final_txt_en != "undefined") Final_txt_en = json.Final_txt_en;
   };
 
   function _unserializePublic(json) { return _model.unserializePublic(json); }
@@ -390,6 +400,8 @@ var _stringProperties = {};
     Player_name = "Nombre"; // EjsS Model.Variables.VariablesTable.Player_name
     Score = 0; // EjsS Model.Variables.VariablesTable.Score
     Player_data = "correo"; // EjsS Model.Variables.VariablesTable.Player_data
+    Final_txt = "¡Enhorabuena, has logrado 0.00 puntos! \n \n \n Pulse 'Reinicio' para jugar nuevamente."; // EjsS Model.Variables.VariablesTable.Final_txt
+    Final_txt_en = false; // EjsS Model.Variables.VariablesTable.Final_txt_en
   });
 
   if (_inputParameters) {
@@ -434,7 +446,7 @@ var _stringProperties = {};
                           // Create a link element to download the updated file  // > CustomCode.Functions:22
                           const downloadLink = document.createElement('a');  // > CustomCode.Functions:23
                           downloadLink.href = URL.createObjectURL(updatedFile);  // > CustomCode.Functions:24
-                          downloadLink.download = 'variables.txt'; // Use the same name  // > CustomCode.Functions:25
+                          downloadLink.download = 'Scores.txt'; // Use the same name  // > CustomCode.Functions:25
                           document.body.appendChild(downloadLink);  // > CustomCode.Functions:26
                           downloadLink.click();  // > CustomCode.Functions:27
                           document.body.removeChild(downloadLink);  // > CustomCode.Functions:28
@@ -503,66 +515,69 @@ var _stringProperties = {};
     /* Stop the game */  // > FixedRelations.Relations:42
     if (t>60){  // > FixedRelations.Relations:43
     _pause()  // > FixedRelations.Relations:44
-    }   // > FixedRelations.Relations:45
-    /* Define text for displaying temperature */  // > FixedRelations.Relations:46
-    T_view = "T = " + Math.round(T*100)/100;  // > FixedRelations.Relations:47
-    /* Define text for displaying temperature */   // > FixedRelations.Relations:48
-    Timer_text = Math.round(t);  // > FixedRelations.Relations:49
-    /* Define position for the Reference bar (Max pos = 0 T = 81C / Min pos = -300 T = 43 */  // > FixedRelations.Relations:50
-    Ref = P_aux*(Ref_pos-Pos_min) + Tmin;  // > FixedRelations.Relations:51
-    if (Ref_pos < Pos_min){  // > FixedRelations.Relations:52
-      Ref_pos = Pos_min;  // > FixedRelations.Relations:53
-    }   // > FixedRelations.Relations:54
-    if (Ref_pos > Pos_max){  // > FixedRelations.Relations:55
-      Ref_pos = Pos_max;  // > FixedRelations.Relations:56
-    }  // > FixedRelations.Relations:57
-    /* Define condition for enable cold face image */  // > FixedRelations.Relations:58
-    Ref_range = (1/P_aux)*Delta_T;  // > FixedRelations.Relations:59
-    if ((T-Ref) < -Delta_T){  // > FixedRelations.Relations:60
-      Cold_en = true;  // > FixedRelations.Relations:61
-    } else {  // > FixedRelations.Relations:62
-      Cold_en = false;  // > FixedRelations.Relations:63
-    }  // > FixedRelations.Relations:64
-    /* Define condition for enable hot face image */  // > FixedRelations.Relations:65
-    if ((T-Ref) > Delta_T){  // > FixedRelations.Relations:66
-      Hot_en = true;  // > FixedRelations.Relations:67
-    } else {  // > FixedRelations.Relations:68
-      Hot_en = false;  // > FixedRelations.Relations:69
-    }  // > FixedRelations.Relations:70
-    /* Define condition for enable good face image */  // > FixedRelations.Relations:71
-    if (Hot_en == true || Cold_en == true ){  // > FixedRelations.Relations:72
-      Good_en = false;  // > FixedRelations.Relations:73
-    } else {  // > FixedRelations.Relations:74
-     Good_en = true;  // > FixedRelations.Relations:75
-     if (Auto){}  // > FixedRelations.Relations:76
-     else{  // > FixedRelations.Relations:77
-       Score = Score + dt/5;  // > FixedRelations.Relations:78
-     }  // > FixedRelations.Relations:79
-    }  // > FixedRelations.Relations:80
-    /* Define variables for temperature indicator zones */  // > FixedRelations.Relations:81
-    Sizey_hot = (Ref_pos-Pos_max) - Sizey_good/2;  // > FixedRelations.Relations:82
-    Posy_hot = Pos_max + Sizey_hot/2;  // > FixedRelations.Relations:83
-    Sizey_cold = Pos_min - Ref_pos + Sizey_good/2;  // > FixedRelations.Relations:84
-    Posy_cold = Pos_min - Sizey_cold/2;  // > FixedRelations.Relations:85
-    /* Define variables for arrow size */  // > FixedRelations.Relations:86
-    Sizey_arrow = ((Size_arrow_max - Size_arrow_min)/(I_max - I_min))*(I*(1-Cloud_op)-I_min) + Size_arrow_min;  // > FixedRelations.Relations:87
-    if (Auto_Mode){  // > FixedRelations.Relations:88
-        // > FixedRelations.Relations:89
-    /* Compute error */  // > FixedRelations.Relations:90
-    error = Ref-T;  // > FixedRelations.Relations:91
-    Int_er = Int_er + error;  // > FixedRelations.Relations:92
-    /* Control signal */  // > FixedRelations.Relations:93
-    q = Kp*(error + Ki*Int_er) + q_ss;   // > FixedRelations.Relations:94
-    /* Anti Winduo */  // > FixedRelations.Relations:95
-    if (q > 10){  // > FixedRelations.Relations:96
-      q = 10;  // > FixedRelations.Relations:97
-      Int_er = Int_er - error;  // > FixedRelations.Relations:98
-      }  // > FixedRelations.Relations:99
-    if (q < 1){  // > FixedRelations.Relations:100
-      q = 1;  // > FixedRelations.Relations:101
-      Int_er = Int_er - error;  // > FixedRelations.Relations:102
-      }   // > FixedRelations.Relations:103
-    }  // > FixedRelations.Relations:104
+    /* Ende game msg */  // > FixedRelations.Relations:45
+    Final_txt = "¡Enhorabuena, has logrado " + Math.round(Score*100)/100 + " puntos! \n \n \n Pulse 'Reinicio' para jugar nuevamente.";  // > FixedRelations.Relations:46
+    Final_txt_en = true;  // > FixedRelations.Relations:47
+    }   // > FixedRelations.Relations:48
+    /* Define text for displaying temperature */  // > FixedRelations.Relations:49
+    T_view = "T = " + Math.round(T*100)/100;  // > FixedRelations.Relations:50
+    /* Define text for displaying temperature */   // > FixedRelations.Relations:51
+    Timer_text = Math.round(t);  // > FixedRelations.Relations:52
+    /* Define position for the Reference bar (Max pos = 0 T = 81C / Min pos = -300 T = 43 */  // > FixedRelations.Relations:53
+    Ref = P_aux*(Ref_pos-Pos_min) + Tmin;  // > FixedRelations.Relations:54
+    if (Ref_pos < Pos_min){  // > FixedRelations.Relations:55
+      Ref_pos = Pos_min;  // > FixedRelations.Relations:56
+    }   // > FixedRelations.Relations:57
+    if (Ref_pos > Pos_max){  // > FixedRelations.Relations:58
+      Ref_pos = Pos_max;  // > FixedRelations.Relations:59
+    }  // > FixedRelations.Relations:60
+    /* Define condition for enable cold face image */  // > FixedRelations.Relations:61
+    Ref_range = (1/P_aux)*Delta_T;  // > FixedRelations.Relations:62
+    if ((T-Ref) < -Delta_T){  // > FixedRelations.Relations:63
+      Cold_en = true;  // > FixedRelations.Relations:64
+    } else {  // > FixedRelations.Relations:65
+      Cold_en = false;  // > FixedRelations.Relations:66
+    }  // > FixedRelations.Relations:67
+    /* Define condition for enable hot face image */  // > FixedRelations.Relations:68
+    if ((T-Ref) > Delta_T){  // > FixedRelations.Relations:69
+      Hot_en = true;  // > FixedRelations.Relations:70
+    } else {  // > FixedRelations.Relations:71
+      Hot_en = false;  // > FixedRelations.Relations:72
+    }  // > FixedRelations.Relations:73
+    /* Define condition for enable good face image */  // > FixedRelations.Relations:74
+    if (Hot_en == true || Cold_en == true ){  // > FixedRelations.Relations:75
+      Good_en = false;  // > FixedRelations.Relations:76
+    } else {  // > FixedRelations.Relations:77
+     Good_en = true;  // > FixedRelations.Relations:78
+     if (Auto_Mode){}  // > FixedRelations.Relations:79
+     else{  // > FixedRelations.Relations:80
+       Score = Score + dt/5;  // > FixedRelations.Relations:81
+     }  // > FixedRelations.Relations:82
+    }  // > FixedRelations.Relations:83
+    /* Define variables for temperature indicator zones */  // > FixedRelations.Relations:84
+    Sizey_hot = (Ref_pos-Pos_max) - Sizey_good/2;  // > FixedRelations.Relations:85
+    Posy_hot = Pos_max + Sizey_hot/2;  // > FixedRelations.Relations:86
+    Sizey_cold = Pos_min - Ref_pos + Sizey_good/2;  // > FixedRelations.Relations:87
+    Posy_cold = Pos_min - Sizey_cold/2;  // > FixedRelations.Relations:88
+    /* Define variables for arrow size */  // > FixedRelations.Relations:89
+    Sizey_arrow = ((Size_arrow_max - Size_arrow_min)/(I_max - I_min))*(I*(1-Cloud_op)-I_min) + Size_arrow_min;  // > FixedRelations.Relations:90
+    if (Auto_Mode){  // > FixedRelations.Relations:91
+        // > FixedRelations.Relations:92
+    /* Compute error */  // > FixedRelations.Relations:93
+    error = Ref-T;  // > FixedRelations.Relations:94
+    Int_er = Int_er + error;  // > FixedRelations.Relations:95
+    /* Control signal */  // > FixedRelations.Relations:96
+    q = Kp*(error + Ki*Int_er) + q_ss;   // > FixedRelations.Relations:97
+    /* Anti Winduo */  // > FixedRelations.Relations:98
+    if (q > 10){  // > FixedRelations.Relations:99
+      q = 10;  // > FixedRelations.Relations:100
+      Int_er = Int_er - error;  // > FixedRelations.Relations:101
+      }  // > FixedRelations.Relations:102
+    if (q < 1){  // > FixedRelations.Relations:103
+      q = 1;  // > FixedRelations.Relations:104
+      Int_er = Int_er - error;  // > FixedRelations.Relations:105
+      }   // > FixedRelations.Relations:106
+    }  // > FixedRelations.Relations:107
   });
 
   _model.addToFixedRelations(function() { _isPaused = _model.isPaused(); _isPlaying = _model.isPlaying(); });
@@ -882,6 +897,10 @@ var _stringProperties = {};
 
 }); // HtmlView setting action 'OnCheckOn' for element 'checkBox'
           _view.Slider.linkProperty("Value",  function() { return q; }, function(_v) { q = _v; } ); // HtmlView linking property 'Value' for element 'Slider'
+          _view.Final_message.linkProperty("Visibility",  function() { return Final_txt_en; }, function(_v) { Final_txt_en = _v; } ); // HtmlView linking property 'Visibility' for element 'Final_message'
+          _view.Test2.linkProperty("CSS",  function() { return { "border-color": "rgb(0,0,0)"}; } ); // HtmlView linking property 'CSS' for element 'Test2'
+          _view.Test2.linkProperty("Text",  function() { return Final_txt; }, function(_v) { Final_txt = _v; } ); // HtmlView linking property 'Text' for element 'Test2'
+          _view.Test2.linkProperty("Visibility",  function() { return Final_txt_en; }, function(_v) { Final_txt_en = _v; } ); // HtmlView linking property 'Visibility' for element 'Test2'
           _view.Manual_bt.setAction("OffClick", _pause); // HtmlView setting action 'OffClick' for element 'Manual_bt'
           _view.Manual_bt.linkProperty("State",  function() { return _isPaused; } ); // HtmlView linking property 'State' for element 'Manual_bt'
           _view.Manual_bt.setAction("OnClick", _play); // HtmlView setting action 'OnClick' for element 'Manual_bt'
@@ -1183,6 +1202,17 @@ function SOLprendete_View_0 (_topFrame) {
     _view._addElement(EJSS_INTERFACE.slider,"Slider", _view.PanelSlider) // EJsS HtmlView.HtmlView: declaration of element 'Slider'
       .setProperty("Minimum",1) // EJsS HtmlView.HtmlView: setting property 'Minimum' for element 'Slider'
       .setProperty("Maximum",10) // EJsS HtmlView.HtmlView: setting property 'Maximum' for element 'Slider'
+      ;
+
+    _view._addElement(EJSS_INTERFACE.panel,"Final_message", _view.MainPanel) // EJsS HtmlView.HtmlView: declaration of element 'Final_message'
+      .setProperty("CSS",{ "cursor":"crosshair", "position":"absolute", "bottom":"600px", "right":"205px", "border-style": "double" }) // EJsS HtmlView.HtmlView: setting property 'CSS' for element 'Final_message'
+      .setProperty("Font","normal normal 40px ") // EJsS HtmlView.HtmlView: setting property 'Font' for element 'Final_message'
+      ;
+
+    _view._addElement(EJSS_INTERFACE.imageAndTextButton,"Test2", _view.Final_message) // EJsS HtmlView.HtmlView: declaration of element 'Test2'
+      .setProperty("Width",750) // EJsS HtmlView.HtmlView: setting property 'Width' for element 'Test2'
+      .setProperty("Background","LightGray") // EJsS HtmlView.HtmlView: setting property 'Background' for element 'Test2'
+      .setProperty("Font","normal bold 40px \"Times New Roman\", Times, serif") // EJsS HtmlView.HtmlView: setting property 'Font' for element 'Test2'
       ;
 
     _view._addElement(EJSS_INTERFACE.panel,"ButtonPanel", _view._topFrame) // EJsS HtmlView.HtmlView: declaration of element 'ButtonPanel'
