@@ -1,0 +1,37 @@
+name: game
+
+services:
+  solprendete_game:
+    container_name: game
+    image: nginx:latest
+    restart: always
+    networks:
+      - base_proxy_network
+    # If no reverse proxy is configured, access through a port
+    # http://ip_address:port
+    # ports:
+    #   - port:80
+    #   - 8090:80
+    volumes:
+      - ./game:/usr/share/nginx/html:ro
+    labels:
+        # Reverse proxy configuration (Traefik)
+        # If not used, just comment this out
+      - "traefik.enable=true"
+      - "traefik.http.routers.csp_game.rule=Host(`game.example.com`)"
+      - "traefik.http.routers.csp_game.entrypoints=websecure"
+      - "traefik.http.services.csp_game.loadbalancer.server.port=80"
+      - "traefik.http.routers.csp_game.tls.certresolver=letsencryptresolver"
+      # - "traefik.http.routers.csp_game.middlewares=error-pages-middleware"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+
+networks:
+  # The network needs to be previously created, otherwise comment this out 
+  # and the `networks` field above and docker will automatically create one
+  base_proxy_network:
+    external: true
