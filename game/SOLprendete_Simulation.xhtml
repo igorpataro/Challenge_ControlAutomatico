@@ -424,39 +424,40 @@ var _stringProperties = {};
 
   function steady(){  // > CustomCode.Functions:1
   q_ss = q;  // > CustomCode.Functions:2
-  }  // > CustomCode.Functions:3
-  function updateFile() {  // > CustomCode.Functions:4
-              // Create an input element to allow file selection  // > CustomCode.Functions:5
-              const inputElement = document.createElement('input');  // > CustomCode.Functions:6
-              inputElement.type = 'file';  // > CustomCode.Functions:7
-              inputElement.accept = '.txt';  // > CustomCode.Functions:8
-              // Add an event listener to handle file selection  // > CustomCode.Functions:9
-              inputElement.addEventListener('change', (event) => {  // > CustomCode.Functions:10
-                  const file = event.target.files[0];  // > CustomCode.Functions:11
-                  if (file) {  // > CustomCode.Functions:12
-                      // Read the file content  // > CustomCode.Functions:13
-                      const reader = new FileReader();  // > CustomCode.Functions:14
-                      reader.onload = function(e) {  // > CustomCode.Functions:15
-                          const content = e.target.result;  // > CustomCode.Functions:16
-                          // > CustomCode.Functions:17
-                          // Prepare new values  // > CustomCode.Functions:18
-                          const updatedContent = content + Player_name + ';' + Math.round(Score*100)/100 + ";" + Player_data + '\n';  // > CustomCode.Functions:19
-                          // Create a Blob with the updated content  // > CustomCode.Functions:20
-                          const updatedFile = new Blob([updatedContent], { type: 'text/plain' });  // > CustomCode.Functions:21
-                          // Create a link element to download the updated file  // > CustomCode.Functions:22
-                          const downloadLink = document.createElement('a');  // > CustomCode.Functions:23
-                          downloadLink.href = URL.createObjectURL(updatedFile);  // > CustomCode.Functions:24
-                          downloadLink.download = 'Scores.txt'; // Use the same name  // > CustomCode.Functions:25
-                          document.body.appendChild(downloadLink);  // > CustomCode.Functions:26
-                          downloadLink.click();  // > CustomCode.Functions:27
-                          document.body.removeChild(downloadLink);  // > CustomCode.Functions:28
-                      };  // > CustomCode.Functions:29
-                      reader.readAsText(file);  // > CustomCode.Functions:30
-                  }  // > CustomCode.Functions:31
-              });  // > CustomCode.Functions:32
-              // Trigger the file input dialog  // > CustomCode.Functions:33
-              inputElement.click();  // > CustomCode.Functions:34
-          }  // > CustomCode.Functions:35
+  Int_er = 0;  // > CustomCode.Functions:3
+  }  // > CustomCode.Functions:4
+  function updateFile() {  // > CustomCode.Functions:5
+              // Create an input element to allow file selection  // > CustomCode.Functions:6
+              const inputElement = document.createElement('input');  // > CustomCode.Functions:7
+              inputElement.type = 'file';  // > CustomCode.Functions:8
+              inputElement.accept = '.txt';  // > CustomCode.Functions:9
+              // Add an event listener to handle file selection  // > CustomCode.Functions:10
+              inputElement.addEventListener('change', (event) => {  // > CustomCode.Functions:11
+                  const file = event.target.files[0];  // > CustomCode.Functions:12
+                  if (file) {  // > CustomCode.Functions:13
+                      // Read the file content  // > CustomCode.Functions:14
+                      const reader = new FileReader();  // > CustomCode.Functions:15
+                      reader.onload = function(e) {  // > CustomCode.Functions:16
+                          const content = e.target.result;  // > CustomCode.Functions:17
+                          // > CustomCode.Functions:18
+                          // Prepare new values  // > CustomCode.Functions:19
+                          const updatedContent = content + Player_name + ';' + Math.round(Score*100)/100 + ";" + Player_data + '\n';  // > CustomCode.Functions:20
+                          // Create a Blob with the updated content  // > CustomCode.Functions:21
+                          const updatedFile = new Blob([updatedContent], { type: 'text/plain' });  // > CustomCode.Functions:22
+                          // Create a link element to download the updated file  // > CustomCode.Functions:23
+                          const downloadLink = document.createElement('a');  // > CustomCode.Functions:24
+                          downloadLink.href = URL.createObjectURL(updatedFile);  // > CustomCode.Functions:25
+                          downloadLink.download = 'Scores.txt'; // Use the same name  // > CustomCode.Functions:26
+                          document.body.appendChild(downloadLink);  // > CustomCode.Functions:27
+                          downloadLink.click();  // > CustomCode.Functions:28
+                          document.body.removeChild(downloadLink);  // > CustomCode.Functions:29
+                      };  // > CustomCode.Functions:30
+                      reader.readAsText(file);  // > CustomCode.Functions:31
+                  }  // > CustomCode.Functions:32
+              });  // > CustomCode.Functions:33
+              // Trigger the file input dialog  // > CustomCode.Functions:34
+              inputElement.click();  // > CustomCode.Functions:35
+          }  // > CustomCode.Functions:36
 
   _model.addToInitialization(function() {
     _initializeSolvers();
@@ -548,36 +549,35 @@ var _stringProperties = {};
     if (Hot_en == true || Cold_en == true ){  // > FixedRelations.Relations:75
       Good_en = false;  // > FixedRelations.Relations:76
     } else {  // > FixedRelations.Relations:77
-     Good_en = true;  // > FixedRelations.Relations:78
-     if (Auto_Mode){}  // > FixedRelations.Relations:79
-     else{  // > FixedRelations.Relations:80
-       Score = Score + dt/5;  // > FixedRelations.Relations:81
-     }  // > FixedRelations.Relations:82
-    }  // > FixedRelations.Relations:83
-    /* Define variables for temperature indicator zones */  // > FixedRelations.Relations:84
-    Sizey_hot = (Ref_pos-Pos_max) - Sizey_good/2;  // > FixedRelations.Relations:85
-    Posy_hot = Pos_max + Sizey_hot/2;  // > FixedRelations.Relations:86
-    Sizey_cold = Pos_min - Ref_pos + Sizey_good/2;  // > FixedRelations.Relations:87
-    Posy_cold = Pos_min - Sizey_cold/2;  // > FixedRelations.Relations:88
-    /* Define variables for arrow size */  // > FixedRelations.Relations:89
-    Sizey_arrow = ((Size_arrow_max - Size_arrow_min)/(I_max - I_min))*(I*(1-Cloud_op)-I_min) + Size_arrow_min;  // > FixedRelations.Relations:90
-    if (Auto_Mode){  // > FixedRelations.Relations:91
-        // > FixedRelations.Relations:92
-    /* Compute error */  // > FixedRelations.Relations:93
-    error = Ref-T;  // > FixedRelations.Relations:94
-    Int_er = Int_er + error;  // > FixedRelations.Relations:95
-    /* Control signal */  // > FixedRelations.Relations:96
-    q = Kp*(error + Ki*Int_er) + q_ss;   // > FixedRelations.Relations:97
-    /* Anti Winduo */  // > FixedRelations.Relations:98
-    if (q > 10){  // > FixedRelations.Relations:99
-      q = 10;  // > FixedRelations.Relations:100
-      Int_er = Int_er - error;  // > FixedRelations.Relations:101
-      }  // > FixedRelations.Relations:102
-    if (q < 1){  // > FixedRelations.Relations:103
-      q = 1;  // > FixedRelations.Relations:104
-      Int_er = Int_er - error;  // > FixedRelations.Relations:105
-      }   // > FixedRelations.Relations:106
-    }  // > FixedRelations.Relations:107
+      Good_en = true;  // > FixedRelations.Relations:78
+        if (Auto_Mode==false && t>=dt){  // > FixedRelations.Relations:79
+       Score = Score + dt/5;  // > FixedRelations.Relations:80
+     }  // > FixedRelations.Relations:81
+    }  // > FixedRelations.Relations:82
+    /* Define variables for temperature indicator zones */  // > FixedRelations.Relations:83
+    Sizey_hot = (Ref_pos-Pos_max) - Sizey_good/2;  // > FixedRelations.Relations:84
+    Posy_hot = Pos_max + Sizey_hot/2;  // > FixedRelations.Relations:85
+    Sizey_cold = Pos_min - Ref_pos + Sizey_good/2;  // > FixedRelations.Relations:86
+    Posy_cold = Pos_min - Sizey_cold/2;  // > FixedRelations.Relations:87
+    /* Define variables for arrow size */  // > FixedRelations.Relations:88
+    Sizey_arrow = ((Size_arrow_max - Size_arrow_min)/(I_max - I_min))*(I*(1-Cloud_op)-I_min) + Size_arrow_min;  // > FixedRelations.Relations:89
+    if (Auto_Mode){  // > FixedRelations.Relations:90
+        // > FixedRelations.Relations:91
+    /* Compute error */  // > FixedRelations.Relations:92
+    error = Ref-T;  // > FixedRelations.Relations:93
+    Int_er = Int_er + error;  // > FixedRelations.Relations:94
+    /* Control signal */  // > FixedRelations.Relations:95
+    q = Kp*(error + Ki*Int_er) + q_ss;   // > FixedRelations.Relations:96
+    /* Anti Winduo */  // > FixedRelations.Relations:97
+    if (q > 10){  // > FixedRelations.Relations:98
+      q = 10;  // > FixedRelations.Relations:99
+      Int_er = Int_er - error;  // > FixedRelations.Relations:100
+      }  // > FixedRelations.Relations:101
+    if (q < 1){  // > FixedRelations.Relations:102
+      q = 1;  // > FixedRelations.Relations:103
+      Int_er = Int_er - error;  // > FixedRelations.Relations:104
+      }   // > FixedRelations.Relations:105
+    }  // > FixedRelations.Relations:106
   });
 
   _model.addToFixedRelations(function() { _isPaused = _model.isPaused(); _isPlaying = _model.isPlaying(); });
