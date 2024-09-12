@@ -1,6 +1,6 @@
 # Challenge_ControlAutomatico
 
-![preview](assets/preview.png)
+![preview](preview.png)
 
 ## Getting started
 
