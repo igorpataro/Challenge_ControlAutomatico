@@ -113,6 +113,13 @@ var _stringProperties = {};
   var Player_data; // EjsS Model.Variables.VariablesTable.Player_data
   var Final_txt; // EjsS Model.Variables.VariablesTable.Final_txt
   var Final_txt_en; // EjsS Model.Variables.VariablesTable.Final_txt_en
+  var Score_max; // EjsS Model.Variables.VariablesTable.Score_max
+  var t_max; // EjsS Model.Variables.VariablesTable.t_max
+  var Reward; // EjsS Model.Variables.VariablesTable.Reward
+  var Score_line_max; // EjsS Model.Variables.VariablesTable.Score_line_max
+  var Score_line_min; // EjsS Model.Variables.VariablesTable.Score_line_min
+  var Player_pos; // EjsS Model.Variables.VariablesTable.Player_pos
+  var Score_rob; // EjsS Model.Variables.VariablesTable.Score_rob
 
   var _privateOdesList;
   var _ODEi_evolution1;
@@ -175,7 +182,14 @@ var _stringProperties = {};
       Score : Score,
       Player_data : Player_data,
       Final_txt : Final_txt,
-      Final_txt_en : Final_txt_en
+      Final_txt_en : Final_txt_en,
+      Score_max : Score_max,
+      t_max : t_max,
+      Reward : Reward,
+      Score_line_max : Score_line_max,
+      Score_line_min : Score_line_min,
+      Player_pos : Player_pos,
+      Score_rob : Score_rob
     };
   };
 
@@ -230,7 +244,14 @@ var _stringProperties = {};
       Score : Score,
       Player_data : Player_data,
       Final_txt : Final_txt,
-      Final_txt_en : Final_txt_en
+      Final_txt_en : Final_txt_en,
+      Score_max : Score_max,
+      t_max : t_max,
+      Reward : Reward,
+      Score_line_max : Score_line_max,
+      Score_line_min : Score_line_min,
+      Player_pos : Player_pos,
+      Score_rob : Score_rob
     };
   };
 
@@ -283,6 +304,13 @@ var _stringProperties = {};
     if(typeof json.Player_data != "undefined") Player_data = json.Player_data;
     if(typeof json.Final_txt != "undefined") Final_txt = json.Final_txt;
     if(typeof json.Final_txt_en != "undefined") Final_txt_en = json.Final_txt_en;
+    if(typeof json.Score_max != "undefined") Score_max = json.Score_max;
+    if(typeof json.t_max != "undefined") t_max = json.t_max;
+    if(typeof json.Reward != "undefined") Reward = json.Reward;
+    if(typeof json.Score_line_max != "undefined") Score_line_max = json.Score_line_max;
+    if(typeof json.Score_line_min != "undefined") Score_line_min = json.Score_line_min;
+    if(typeof json.Player_pos != "undefined") Player_pos = json.Player_pos;
+    if(typeof json.Score_rob != "undefined") Score_rob = json.Score_rob;
   };
 
   _model._readParametersPublic = function(json) {
@@ -334,6 +362,13 @@ var _stringProperties = {};
     if(typeof json.Player_data != "undefined") Player_data = json.Player_data;
     if(typeof json.Final_txt != "undefined") Final_txt = json.Final_txt;
     if(typeof json.Final_txt_en != "undefined") Final_txt_en = json.Final_txt_en;
+    if(typeof json.Score_max != "undefined") Score_max = json.Score_max;
+    if(typeof json.t_max != "undefined") t_max = json.t_max;
+    if(typeof json.Reward != "undefined") Reward = json.Reward;
+    if(typeof json.Score_line_max != "undefined") Score_line_max = json.Score_line_max;
+    if(typeof json.Score_line_min != "undefined") Score_line_min = json.Score_line_min;
+    if(typeof json.Player_pos != "undefined") Player_pos = json.Player_pos;
+    if(typeof json.Score_rob != "undefined") Score_rob = json.Score_rob;
   };
 
   function _unserializePublic(json) { return _model.unserializePublic(json); }
@@ -391,7 +426,7 @@ var _stringProperties = {};
     Tmin = 48; // EjsS Model.Variables.VariablesTable.Tmin
     L_max = 350; // EjsS Model.Variables.VariablesTable.L_max
     L_min = 50; // EjsS Model.Variables.VariablesTable.L_min
-    Delta_T = 1; // EjsS Model.Variables.VariablesTable.Delta_T
+    Delta_T = 0.4; // EjsS Model.Variables.VariablesTable.Delta_T
     Auto_Mode = false; // EjsS Model.Variables.VariablesTable.Auto_Mode
     I_max = 600; // EjsS Model.Variables.VariablesTable.I_max
     I_min = 300; // EjsS Model.Variables.VariablesTable.I_min
@@ -402,6 +437,11 @@ var _stringProperties = {};
     Player_data = "correo"; // EjsS Model.Variables.VariablesTable.Player_data
     Final_txt = "¡Enhorabuena, has logrado 0.00 puntos! \n \n \n Pulse 'Reinicio' para jugar nuevamente."; // EjsS Model.Variables.VariablesTable.Final_txt
     Final_txt_en = false; // EjsS Model.Variables.VariablesTable.Final_txt_en
+    t_max = 60; // EjsS Model.Variables.VariablesTable.t_max
+    Reward = 0.01; // EjsS Model.Variables.VariablesTable.Reward
+    Score_line_max = 90; // EjsS Model.Variables.VariablesTable.Score_line_max
+    Score_line_min = -90; // EjsS Model.Variables.VariablesTable.Score_line_min
+    Score_rob = 10.1; // EjsS Model.Variables.VariablesTable.Score_rob
   });
 
   if (_inputParameters) {
@@ -472,112 +512,115 @@ var _stringProperties = {};
 
   _model.addToFixedRelations(function() {
     if (!__pagesEnabled["Relations"]) return;
-    /* Sun position and Irradiance level */  // > FixedRelations.Relations:1
-    I = -t*t*0.333+ 20*t + 300;  // > FixedRelations.Relations:2
-    /* Compute opacity for the clouds and the irradiance discount factor */   // > FixedRelations.Relations:3
-    if (t>= 25 && t<=35){  // > FixedRelations.Relations:4
-      factor = 0.4;  // > FixedRelations.Relations:5
-      if (t<25){  // > FixedRelations.Relations:6
-      t=25;  // > FixedRelations.Relations:7
-      }  // > FixedRelations.Relations:8
-      if (t>35){  // > FixedRelations.Relations:9
-      t=35;  // > FixedRelations.Relations:10
-      }  // > FixedRelations.Relations:11
-      Cloud_op = -t*t/25 + 12*t/5 - 35;   // > FixedRelations.Relations:12
-        // > FixedRelations.Relations:13
-      } else {  // > FixedRelations.Relations:14
-      factor = 1;  // > FixedRelations.Relations:15
-      Cloud_op = 0;   // > FixedRelations.Relations:16
-      }  // > FixedRelations.Relations:17
-    /* Convert temperature for a range from [0, 1] of the Maximum and minimum  */  // > FixedRelations.Relations:18
-    T_aux = (T-Tmin)/(Tmax-Tmin);  // > FixedRelations.Relations:19
-    /* Temperature levels indicator */   // > FixedRelations.Relations:20
-    P_aux = ((Tmax - Tmin)/(Pos_max-Pos_min)) ;   // > FixedRelations.Relations:21
-    /* L_indicator = 58.333*T - 2800; */  // > FixedRelations.Relations:22
-    L_indicator = (L_max-L_min)*((T-Tmin)/(Tmax-Tmin)) + L_min;  // > FixedRelations.Relations:23
-    if (L_indicator>L_max){  // > FixedRelations.Relations:24
-      L_indicator=L_max;  // > FixedRelations.Relations:25
-      }  // > FixedRelations.Relations:26
-      if (L_indicator<L_min){  // > FixedRelations.Relations:27
-      L_indicator=L_min;  // > FixedRelations.Relations:28
-      }  // > FixedRelations.Relations:29
-    /* Define color */  // > FixedRelations.Relations:30
-    if (T_aux<0.35){  // > FixedRelations.Relations:31
-      red = 0;  // > FixedRelations.Relations:32
-      green = 255*(T_aux+0.3);  // > FixedRelations.Relations:33
-      blue = 255;  // > FixedRelations.Relations:34
-    }else if(T_aux>=0.35){  // > FixedRelations.Relations:35
-      red = 255;  // > FixedRelations.Relations:36
-      green = 145*(1-T_aux);  // > FixedRelations.Relations:37
-      blue = 0;  // > FixedRelations.Relations:38
-    }  // > FixedRelations.Relations:39
-          // > FixedRelations.Relations:40
-    Color = "rgb(" + red + "," + green + "," + blue + ")";  // > FixedRelations.Relations:41
-    /* Stop the game */  // > FixedRelations.Relations:42
-    if (t>60){  // > FixedRelations.Relations:43
-    _pause()  // > FixedRelations.Relations:44
-    /* Ende game msg */  // > FixedRelations.Relations:45
-    Final_txt = "¡Enhorabuena, has logrado " + Math.round(Score*100)/100 + " puntos! \n \n \n Pulse 'Reinicio' para jugar nuevamente.";  // > FixedRelations.Relations:46
-    Final_txt_en = true;  // > FixedRelations.Relations:47
-    }   // > FixedRelations.Relations:48
-    /* Define text for displaying temperature */  // > FixedRelations.Relations:49
-    T_view = "T = " + Math.round(T*100)/100;  // > FixedRelations.Relations:50
-    /* Define text for displaying temperature */   // > FixedRelations.Relations:51
-    Timer_text = Math.round(t);  // > FixedRelations.Relations:52
-    /* Define position for the Reference bar (Max pos = 0 T = 81C / Min pos = -300 T = 43 */  // > FixedRelations.Relations:53
-    Ref = P_aux*(Ref_pos-Pos_min) + Tmin;  // > FixedRelations.Relations:54
-    if (Ref_pos < Pos_min){  // > FixedRelations.Relations:55
-      Ref_pos = Pos_min;  // > FixedRelations.Relations:56
-    }   // > FixedRelations.Relations:57
-    if (Ref_pos > Pos_max){  // > FixedRelations.Relations:58
-      Ref_pos = Pos_max;  // > FixedRelations.Relations:59
-    }  // > FixedRelations.Relations:60
-    /* Define condition for enable cold face image */  // > FixedRelations.Relations:61
-    Ref_range = (1/P_aux)*Delta_T;  // > FixedRelations.Relations:62
-    if ((T-Ref) < -Delta_T){  // > FixedRelations.Relations:63
-      Cold_en = true;  // > FixedRelations.Relations:64
-    } else {  // > FixedRelations.Relations:65
-      Cold_en = false;  // > FixedRelations.Relations:66
-    }  // > FixedRelations.Relations:67
-    /* Define condition for enable hot face image */  // > FixedRelations.Relations:68
-    if ((T-Ref) > Delta_T){  // > FixedRelations.Relations:69
-      Hot_en = true;  // > FixedRelations.Relations:70
-    } else {  // > FixedRelations.Relations:71
-      Hot_en = false;  // > FixedRelations.Relations:72
-    }  // > FixedRelations.Relations:73
-    /* Define condition for enable good face image */  // > FixedRelations.Relations:74
-    if (Hot_en == true || Cold_en == true ){  // > FixedRelations.Relations:75
-      Good_en = false;  // > FixedRelations.Relations:76
-    } else {  // > FixedRelations.Relations:77
-      Good_en = true;  // > FixedRelations.Relations:78
-        if (Auto_Mode==false && t>=dt){  // > FixedRelations.Relations:79
-       Score = Score + dt/5;  // > FixedRelations.Relations:80
-     }  // > FixedRelations.Relations:81
+    /* Max score points */  // > FixedRelations.Relations:1
+    Score_max = (t_max/dt)*Reward;  // > FixedRelations.Relations:2
+    /* Sun position and Irradiance level */  // > FixedRelations.Relations:3
+    I = -t*t*0.333+ 20*t + 300;  // > FixedRelations.Relations:4
+    /* Compute opacity for the clouds and the irradiance discount factor */   // > FixedRelations.Relations:5
+    if (t>= 25 && t<=35){  // > FixedRelations.Relations:6
+      factor = 0.4;  // > FixedRelations.Relations:7
+      if (t<25){  // > FixedRelations.Relations:8
+      t=25;  // > FixedRelations.Relations:9
+      }  // > FixedRelations.Relations:10
+      if (t>35){  // > FixedRelations.Relations:11
+      t=35;  // > FixedRelations.Relations:12
+      }  // > FixedRelations.Relations:13
+      Cloud_op = -t*t/25 + 12*t/5 - 35;   // > FixedRelations.Relations:14
+        // > FixedRelations.Relations:15
+      } else {  // > FixedRelations.Relations:16
+      factor = 1;  // > FixedRelations.Relations:17
+      Cloud_op = 0;   // > FixedRelations.Relations:18
+      }  // > FixedRelations.Relations:19
+    /* Convert temperature for a range from [0, 1] of the Maximum and minimum  */  // > FixedRelations.Relations:20
+    T_aux = (T-Tmin)/(Tmax-Tmin);  // > FixedRelations.Relations:21
+    /* Temperature levels indicator */   // > FixedRelations.Relations:22
+    P_aux = ((Tmax - Tmin)/(Pos_max-Pos_min)) ;   // > FixedRelations.Relations:23
+    /* L_indicator = 58.333*T - 2800; */  // > FixedRelations.Relations:24
+    L_indicator = (L_max-L_min)*((T-Tmin)/(Tmax-Tmin)) + L_min;  // > FixedRelations.Relations:25
+    if (L_indicator>L_max){  // > FixedRelations.Relations:26
+      L_indicator=L_max;  // > FixedRelations.Relations:27
+      }  // > FixedRelations.Relations:28
+      if (L_indicator<L_min){  // > FixedRelations.Relations:29
+      L_indicator=L_min;  // > FixedRelations.Relations:30
+      }  // > FixedRelations.Relations:31
+    /* Define color */  // > FixedRelations.Relations:32
+    if (T_aux<0.35){  // > FixedRelations.Relations:33
+      red = 0;  // > FixedRelations.Relations:34
+      green = 255*(T_aux+0.3);  // > FixedRelations.Relations:35
+      blue = 255;  // > FixedRelations.Relations:36
+    }else if(T_aux>=0.35){  // > FixedRelations.Relations:37
+      red = 255;  // > FixedRelations.Relations:38
+      green = 145*(1-T_aux);  // > FixedRelations.Relations:39
+      blue = 0;  // > FixedRelations.Relations:40
+    }  // > FixedRelations.Relations:41
+          // > FixedRelations.Relations:42
+    Color = "rgb(" + red + "," + green + "," + blue + ")";  // > FixedRelations.Relations:43
+    /* Stop the game */  // > FixedRelations.Relations:44
+    if (t>t_max){  // > FixedRelations.Relations:45
+    _pause()  // > FixedRelations.Relations:46
+    /* Ende game msg */  // > FixedRelations.Relations:47
+    Final_txt = "¡Enhorabuena, has logrado " + Math.round(Score*100)/100 + " puntos! \n \n \n Pulse 'Reinicio' para jugar nuevamente.";  // > FixedRelations.Relations:48
+    Final_txt_en = true;  // > FixedRelations.Relations:49
+    }   // > FixedRelations.Relations:50
+    /* Define text for displaying temperature */  // > FixedRelations.Relations:51
+    T_view = "T = " + Math.round(T*100)/100;  // > FixedRelations.Relations:52
+    /* Define text for displaying temperature */   // > FixedRelations.Relations:53
+    Timer_text = Math.round(t);  // > FixedRelations.Relations:54
+    /* Define position for the Reference bar (Max pos = 0 T = 81C / Min pos = -300 T = 43 */  // > FixedRelations.Relations:55
+    Ref = P_aux*(Ref_pos-Pos_min) + Tmin;  // > FixedRelations.Relations:56
+    if (Ref_pos < Pos_min){  // > FixedRelations.Relations:57
+      Ref_pos = Pos_min;  // > FixedRelations.Relations:58
+    }   // > FixedRelations.Relations:59
+    if (Ref_pos > Pos_max){  // > FixedRelations.Relations:60
+      Ref_pos = Pos_max;  // > FixedRelations.Relations:61
+    }  // > FixedRelations.Relations:62
+    /* Define condition for enable cold face image */  // > FixedRelations.Relations:63
+    Ref_range = (1/P_aux)*Delta_T;  // > FixedRelations.Relations:64
+    if ((T-Ref) < -Delta_T){  // > FixedRelations.Relations:65
+      Cold_en = true;  // > FixedRelations.Relations:66
+    } else {  // > FixedRelations.Relations:67
+      Cold_en = false;  // > FixedRelations.Relations:68
+    }  // > FixedRelations.Relations:69
+    /* Define condition for enable hot face image */  // > FixedRelations.Relations:70
+    if ((T-Ref) > Delta_T){  // > FixedRelations.Relations:71
+      Hot_en = true;  // > FixedRelations.Relations:72
+    } else {  // > FixedRelations.Relations:73
+      Hot_en = false;  // > FixedRelations.Relations:74
+    }  // > FixedRelations.Relations:75
+    /* Define condition for enable good face image */  // > FixedRelations.Relations:76
+    if (Hot_en == true || Cold_en == true ){  // > FixedRelations.Relations:77
+      Good_en = false;  // > FixedRelations.Relations:78
+    } else {  // > FixedRelations.Relations:79
+      Good_en = true;  // > FixedRelations.Relations:80
+      Score = Score + Reward;  // > FixedRelations.Relations:81
     }  // > FixedRelations.Relations:82
-    /* Define variables for temperature indicator zones */  // > FixedRelations.Relations:83
-    Sizey_hot = (Ref_pos-Pos_max) - Sizey_good/2;  // > FixedRelations.Relations:84
-    Posy_hot = Pos_max + Sizey_hot/2;  // > FixedRelations.Relations:85
-    Sizey_cold = Pos_min - Ref_pos + Sizey_good/2;  // > FixedRelations.Relations:86
-    Posy_cold = Pos_min - Sizey_cold/2;  // > FixedRelations.Relations:87
-    /* Define variables for arrow size */  // > FixedRelations.Relations:88
-    Sizey_arrow = ((Size_arrow_max - Size_arrow_min)/(I_max - I_min))*(I*(1-Cloud_op)-I_min) + Size_arrow_min;  // > FixedRelations.Relations:89
-    if (Auto_Mode){  // > FixedRelations.Relations:90
-        // > FixedRelations.Relations:91
-    /* Compute error */  // > FixedRelations.Relations:92
-    error = Ref-T;  // > FixedRelations.Relations:93
-    Int_er = Int_er + error;  // > FixedRelations.Relations:94
-    /* Control signal */  // > FixedRelations.Relations:95
-    q = Kp*(error + Ki*Int_er) + q_ss;   // > FixedRelations.Relations:96
-    /* Anti Winduo */  // > FixedRelations.Relations:97
-    if (q > 10){  // > FixedRelations.Relations:98
-      q = 10;  // > FixedRelations.Relations:99
-      Int_er = Int_er - error;  // > FixedRelations.Relations:100
-      }  // > FixedRelations.Relations:101
-    if (q < 1){  // > FixedRelations.Relations:102
-      q = 1;  // > FixedRelations.Relations:103
-      Int_er = Int_er - error;  // > FixedRelations.Relations:104
-      }   // > FixedRelations.Relations:105
-    }  // > FixedRelations.Relations:106
+    /* Define score line positions */  // > FixedRelations.Relations:83
+    Player_pos = (Score_line_max - Score_line_min)*Score/Score_max + Score_line_min;  // > FixedRelations.Relations:84
+    Robot_pos = (Score_line_max - Score_line_min)*Score_rob/Score_max + Score_line_min;  // > FixedRelations.Relations:85
+    /* Define variables for temperature indicator zones */  // > FixedRelations.Relations:86
+    Sizey_hot = (Ref_pos-Pos_max) - Sizey_good/2;  // > FixedRelations.Relations:87
+    Posy_hot = Pos_max + Sizey_hot/2;  // > FixedRelations.Relations:88
+    Sizey_cold = Pos_min - Ref_pos + Sizey_good/2;  // > FixedRelations.Relations:89
+    Posy_cold = Pos_min - Sizey_cold/2;  // > FixedRelations.Relations:90
+    /* Define variables for arrow size */  // > FixedRelations.Relations:91
+    Sizey_arrow = ((Size_arrow_max - Size_arrow_min)/(I_max - I_min))*(I*(1-Cloud_op)-I_min) + Size_arrow_min;  // > FixedRelations.Relations:92
+    if (Auto_Mode){  // > FixedRelations.Relations:93
+        // > FixedRelations.Relations:94
+    /* Compute error */  // > FixedRelations.Relations:95
+    error = Ref-T;  // > FixedRelations.Relations:96
+    Int_er = Int_er + error;  // > FixedRelations.Relations:97
+    /* Control signal */  // > FixedRelations.Relations:98
+    q = Kp*(error + Ki*Int_er) + q_ss;   // > FixedRelations.Relations:99
+    /* Anti Winduo */  // > FixedRelations.Relations:100
+    if (q > 10){  // > FixedRelations.Relations:101
+      q = 10;  // > FixedRelations.Relations:102
+      Int_er = Int_er - error;  // > FixedRelations.Relations:103
+      }  // > FixedRelations.Relations:104
+    if (q < 1){  // > FixedRelations.Relations:105
+      q = 1;  // > FixedRelations.Relations:106
+      Int_er = Int_er - error;  // > FixedRelations.Relations:107
+      }   // > FixedRelations.Relations:108
+    }  // > FixedRelations.Relations:109
   });
 
   _model.addToFixedRelations(function() { _isPaused = _model.isPaused(); _isPlaying = _model.isPlaying(); });
@@ -841,6 +884,11 @@ var _stringProperties = {};
         case -10 : break; // make Lint happy
         default :
         case 0:
+          _view.Pointer_player.linkProperty("X",  function() { return Player_pos; }, function(_v) { Player_pos = _v; } ); // HtmlView linking property 'X' for element 'Pointer_player'
+          _view.Player_fig.linkProperty("X",  function() { return Player_pos; }, function(_v) { Player_pos = _v; } ); // HtmlView linking property 'X' for element 'Player_fig'
+          _view.Pointer_robot.linkProperty("X",  function() { return Robot_pos; } ); // HtmlView linking property 'X' for element 'Pointer_robot'
+          _view.Robot_fig.linkProperty("X",  function() { return Robot_pos; } ); // HtmlView linking property 'X' for element 'Robot_fig'
+          _view.Finish_line.linkProperty("X",  function() { return Score_line_max+10; } ); // HtmlView linking property 'X' for element 'Finish_line'
           _view.Background.linkProperty("SizeX",  function() { return 1700*1.2; } ); // HtmlView linking property 'SizeX' for element 'Background'
           _view.Sol.linkProperty("X",  function() { return -800 + t*1600/60; } ); // HtmlView linking property 'X' for element 'Sol'
           _view.Sol.linkProperty("Y",  function() { return I; }, function(_v) { I = _v; } ); // HtmlView linking property 'Y' for element 'Sol'
@@ -900,7 +948,6 @@ var _stringProperties = {};
           _view.Final_message.linkProperty("Visibility",  function() { return Final_txt_en; }, function(_v) { Final_txt_en = _v; } ); // HtmlView linking property 'Visibility' for element 'Final_message'
           _view.Test2.linkProperty("CSS",  function() { return { "border-color": "rgb(0,0,0)"}; } ); // HtmlView linking property 'CSS' for element 'Test2'
           _view.Test2.linkProperty("Text",  function() { return Final_txt; }, function(_v) { Final_txt = _v; } ); // HtmlView linking property 'Text' for element 'Test2'
-          _view.Test2.linkProperty("Visibility",  function() { return Final_txt_en; }, function(_v) { Final_txt_en = _v; } ); // HtmlView linking property 'Visibility' for element 'Test2'
           _view.Manual_bt.setAction("OffClick", _pause); // HtmlView setting action 'OffClick' for element 'Manual_bt'
           _view.Manual_bt.linkProperty("State",  function() { return _isPaused; } ); // HtmlView linking property 'State' for element 'Manual_bt'
           _view.Manual_bt.setAction("OnClick", _play); // HtmlView setting action 'OnClick' for element 'Manual_bt'
@@ -947,12 +994,74 @@ function SOLprendete_View_0 (_topFrame) {
   _view._reset = function() {
     _view._clearAll();
     _view._addElement(EJSS_INTERFACE.panel,"TopPanel", _view._topFrame) // EJsS HtmlView.HtmlView: declaration of element 'TopPanel'
+      .setProperty("Height",100) // EJsS HtmlView.HtmlView: setting property 'Height' for element 'TopPanel'
       .setProperty("Width",1200) // EJsS HtmlView.HtmlView: setting property 'Width' for element 'TopPanel'
       ;
 
     _view._addElement(EJSS_INTERFACE.imageAndTextButton,"SOLprendete", _view.TopPanel) // EJsS HtmlView.HtmlView: declaration of element 'SOLprendete'
-      .setProperty("Text","SOLprendete") // EJsS HtmlView.HtmlView: setting property 'Text' for element 'SOLprendete'
-      .setProperty("Font","normal normal 40px ") // EJsS HtmlView.HtmlView: setting property 'Font' for element 'SOLprendete'
+      .setProperty("Height",100) // EJsS HtmlView.HtmlView: setting property 'Height' for element 'SOLprendete'
+      .setProperty("Width",600) // EJsS HtmlView.HtmlView: setting property 'Width' for element 'SOLprendete'
+      .setProperty("Text","SOLpréndete") // EJsS HtmlView.HtmlView: setting property 'Text' for element 'SOLprendete'
+      .setProperty("Font","normal normal 40px \"Arial Black\", Gadget, sans-serif") // EJsS HtmlView.HtmlView: setting property 'Font' for element 'SOLprendete'
+      ;
+
+    _view._addElement(EJSS_DRAWING2D.drawingPanel,"FinishLine", _view.TopPanel) // EJsS HtmlView.HtmlView: declaration of element 'FinishLine'
+      .setProperty("Height",90) // EJsS HtmlView.HtmlView: setting property 'Height' for element 'FinishLine'
+      .setProperty("Width",600) // EJsS HtmlView.HtmlView: setting property 'Width' for element 'FinishLine'
+      .setProperty("MinimumX",-100) // EJsS HtmlView.HtmlView: setting property 'MinimumX' for element 'FinishLine'
+      .setProperty("MinimumY",-100) // EJsS HtmlView.HtmlView: setting property 'MinimumY' for element 'FinishLine'
+      .setProperty("Background","White") // EJsS HtmlView.HtmlView: setting property 'Background' for element 'FinishLine'
+      .setProperty("LineWidth",0) // EJsS HtmlView.HtmlView: setting property 'LineWidth' for element 'FinishLine'
+      .setProperty("MaximumY",100) // EJsS HtmlView.HtmlView: setting property 'MaximumY' for element 'FinishLine'
+      .setProperty("MaximumX",100) // EJsS HtmlView.HtmlView: setting property 'MaximumX' for element 'FinishLine'
+      ;
+
+    _view._addElement(EJSS_DRAWING2D.shape,"Line", _view.FinishLine) // EJsS HtmlView.HtmlView: declaration of element 'Line'
+      .setProperty("FillColor","rgba(0,100,255,1.0)") // EJsS HtmlView.HtmlView: setting property 'FillColor' for element 'Line'
+      .setProperty("SizeX",180) // EJsS HtmlView.HtmlView: setting property 'SizeX' for element 'Line'
+      .setProperty("ShapeType","RECTANGLE") // EJsS HtmlView.HtmlView: setting property 'ShapeType' for element 'Line'
+      .setProperty("X",0) // EJsS HtmlView.HtmlView: setting property 'X' for element 'Line'
+      .setProperty("Y",0) // EJsS HtmlView.HtmlView: setting property 'Y' for element 'Line'
+      .setProperty("SizeY",20) // EJsS HtmlView.HtmlView: setting property 'SizeY' for element 'Line'
+      ;
+
+    _view._addElement(EJSS_DRAWING2D.arrow,"Pointer_player", _view.FinishLine) // EJsS HtmlView.HtmlView: declaration of element 'Pointer_player'
+      .setProperty("SizeX",5) // EJsS HtmlView.HtmlView: setting property 'SizeX' for element 'Pointer_player'
+      .setProperty("Rotate",1.47) // EJsS HtmlView.HtmlView: setting property 'Rotate' for element 'Pointer_player'
+      .setProperty("LineColor","rgba(102,139,71,1.0)") // EJsS HtmlView.HtmlView: setting property 'LineColor' for element 'Pointer_player'
+      .setProperty("Y",-45) // EJsS HtmlView.HtmlView: setting property 'Y' for element 'Pointer_player'
+      .setProperty("SizeY",3) // EJsS HtmlView.HtmlView: setting property 'SizeY' for element 'Pointer_player'
+      .setProperty("LineWidth",3) // EJsS HtmlView.HtmlView: setting property 'LineWidth' for element 'Pointer_player'
+      ;
+
+    _view._addElement(EJSS_DRAWING2D.image,"Player_fig", _view.FinishLine) // EJsS HtmlView.HtmlView: declaration of element 'Player_fig'
+      .setProperty("SizeX",15) // EJsS HtmlView.HtmlView: setting property 'SizeX' for element 'Player_fig'
+      .setProperty("ImageUrl","./CSP_game/peepoblushspinner-pepe.gif") // EJsS HtmlView.HtmlView: setting property 'ImageUrl' for element 'Player_fig'
+      .setProperty("Y",-70) // EJsS HtmlView.HtmlView: setting property 'Y' for element 'Player_fig'
+      .setProperty("SizeY",70) // EJsS HtmlView.HtmlView: setting property 'SizeY' for element 'Player_fig'
+      ;
+
+    _view._addElement(EJSS_DRAWING2D.arrow,"Pointer_robot", _view.FinishLine) // EJsS HtmlView.HtmlView: declaration of element 'Pointer_robot'
+      .setProperty("SizeX",5) // EJsS HtmlView.HtmlView: setting property 'SizeX' for element 'Pointer_robot'
+      .setProperty("Rotate",-1.65) // EJsS HtmlView.HtmlView: setting property 'Rotate' for element 'Pointer_robot'
+      .setProperty("LineColor","Blue") // EJsS HtmlView.HtmlView: setting property 'LineColor' for element 'Pointer_robot'
+      .setProperty("Y",45) // EJsS HtmlView.HtmlView: setting property 'Y' for element 'Pointer_robot'
+      .setProperty("SizeY",3) // EJsS HtmlView.HtmlView: setting property 'SizeY' for element 'Pointer_robot'
+      .setProperty("LineWidth",3) // EJsS HtmlView.HtmlView: setting property 'LineWidth' for element 'Pointer_robot'
+      ;
+
+    _view._addElement(EJSS_DRAWING2D.image,"Robot_fig", _view.FinishLine) // EJsS HtmlView.HtmlView: declaration of element 'Robot_fig'
+      .setProperty("SizeX",20) // EJsS HtmlView.HtmlView: setting property 'SizeX' for element 'Robot_fig'
+      .setProperty("ImageUrl","./CSP_game/robot.png") // EJsS HtmlView.HtmlView: setting property 'ImageUrl' for element 'Robot_fig'
+      .setProperty("Y",60) // EJsS HtmlView.HtmlView: setting property 'Y' for element 'Robot_fig'
+      .setProperty("SizeY",80) // EJsS HtmlView.HtmlView: setting property 'SizeY' for element 'Robot_fig'
+      ;
+
+    _view._addElement(EJSS_DRAWING2D.image,"Finish_line", _view.FinishLine) // EJsS HtmlView.HtmlView: declaration of element 'Finish_line'
+      .setProperty("SizeX",25) // EJsS HtmlView.HtmlView: setting property 'SizeX' for element 'Finish_line'
+      .setProperty("Y",40) // EJsS HtmlView.HtmlView: setting property 'Y' for element 'Finish_line'
+      .setProperty("ImageUrl","./CSP_game/golf-flag.png") // EJsS HtmlView.HtmlView: setting property 'ImageUrl' for element 'Finish_line'
+      .setProperty("SizeY",120) // EJsS HtmlView.HtmlView: setting property 'SizeY' for element 'Finish_line'
       ;
 
     _view._addElement(EJSS_INTERFACE.panel,"MainPanel", _view._topFrame) // EJsS HtmlView.HtmlView: declaration of element 'MainPanel'
@@ -1271,16 +1380,17 @@ function SOLprendete_View_0 (_topFrame) {
       <b>Title and author:</b>
       <p>
       SOLprendete<br />
+     <img alt="Logo" src="CSP_game/pepe_wink.png" />
       </p>
       <p>
- Juan Miguel
+ Juan Miguel; Igor Pataro
       </p>
     </div>
     <hr />
     <p></p>
     <div id="copyright_message">
       <div class="cc_left"  style="float:left">
-        <p>&#169; 2024, Juan Miguel.</p>
+        <p>&#169; 2024, Juan Miguel; Igor Pataro.</p>
         <p>Created with <a target="_blank" href="https://gitlab.com/ejsS/JavaScriptEditor/release">JavaScript Easy Java Simulations 6.02_BETA (Build 210903)</a></p>
         <p><a target="_blank" href="https://gitlab.com/ejsS/JavaScriptEditor/release"><img alt="EJS Logo here" src="_ejs_library/images/JavaScriptEJSLogo.png" /></a></p>
       </div>

@@ -2,10 +2,10 @@
 <Module>
 <ModulePrefs
 title="SOLprendete"
-author="Juan Miguel"
+author="Juan Miguel; Igor Pataro"
 description=""
-screenshot=""
-thumbnail="">
+screenshot="./CSP_game/pepe_wink.png"
+thumbnail="./CSP_game/pepe_wink.png">
 <Require feature="opensocial-0.9"/>
 <Require feature="dynamic-height"/>
 </ModulePrefs>
